@@ -1,6 +1,9 @@
 # シン・写ルンです
 
-現時点で、プレビュー画像のリクエスト用 string は `String request = "previewRequest"`<br>
+> **Warning**
+> CONNECT TO CAMERA ボタンを押すとクラッシュしますが、現時点でBluetoothアドレスがplaceholderであるためです。
+
+プレビュー画像のリクエスト用 string は `String request = "previewRequest"`<br>
 撮影のリクエスト用 string は `String request = "shootRequest"` です。<br><br>
 Raspberry Pi (Python) 側の実装は以下のようなものを想定しています。<br>
 (ChatGPTより作成)
