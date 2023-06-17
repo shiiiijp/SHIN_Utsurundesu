@@ -2,7 +2,7 @@
 
 現時点で、プレビュー画像のリクエスト用 string は `String request = "previewRequest"`<br>
 撮影のリクエスト用 string は `String request = "shootRequest"` です。<br><br>
-Raspberry Pi (Python) 側の実装は次のようなものを想定しています。<br>
+Raspberry Pi (Python) 側の実装は以下のようなものを想定しています。<br>
 (ChatGPTより作成)
 
 ```python
