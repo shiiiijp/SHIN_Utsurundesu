@@ -1,6 +1,6 @@
 # シン・写ルンです
 
-Raspberry Pi (Python) 側の実装は次のようなものを想定しています。
+Raspberry Pi (Python) 側の実装は次のようなものを想定しています。<br>
 (ChatGPTより作成)
 
 ```python
@@ -39,3 +39,6 @@ def receive_request():
     client_sock.close()
     server_sock.close()
 ```
+
+プレビュー画像のリクエスト用 string は `String request = "previewrRequest"`<br>
+撮影のリクエスト用 string は `String request = "shootRequest"` としています。
