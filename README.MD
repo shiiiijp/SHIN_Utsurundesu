@@ -1,6 +1,6 @@
 # シン・写ルンです
 
-> **Warning**
+> **Warning**  
 > CONNECT TO CAMERA ボタンを押すとクラッシュしますが、現時点でBluetoothアドレスがplaceholderであるためです。
 
 プレビュー画像のリクエスト用 string は `String request = "previewRequest"`<br>
