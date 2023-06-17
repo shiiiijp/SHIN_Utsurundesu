@@ -1,5 +1,7 @@
 # シン・写ルンです
 
+現時点で、プレビュー画像のリクエスト用 string は `String request = "previewrRequest"`<br>
+撮影のリクエスト用 string は `String request = "shootRequest"` です。
 Raspberry Pi (Python) 側の実装は次のようなものを想定しています。<br>
 (ChatGPTより作成)
 
@@ -39,6 +41,3 @@ def receive_request():
     client_sock.close()
     server_sock.close()
 ```
-
-プレビュー画像のリクエスト用 string は `String request = "previewrRequest"`<br>
-撮影のリクエスト用 string は `String request = "shootRequest"` としています。
