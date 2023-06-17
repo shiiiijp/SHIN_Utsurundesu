@@ -1,8 +1,8 @@
 # シン・写ルンです
 
 > **Warning**  
-> `CONNECT TO CAMERA` ボタンを押すとクラッシュします。
-> 現時点でBluetoothアドレスがplaceholderであるためです。
+> `CONNECT TO CAMERA` ボタンを押すとクラッシュしますが、正常に動作しています。  
+> (現時点でBluetoothアドレスがplaceholderであるため)
 
 プレビュー画像のリクエスト用 string は `String request = "previewRequest"`<br>
 撮影のリクエスト用 string は `String request = "shootRequest"` です。<br><br>
