@@ -1,5 +1,8 @@
 # シン・写ルンです
-
+  
+> **Info**  
+> 酒飲みながら書きました  
+  
 > **Warning**  
 > `CONNECT TO CAMERA` ボタンを押すとクラッシュしますが、正常に動作しています。  
 > (現時点でBluetoothアドレスがplaceholderであるため)
