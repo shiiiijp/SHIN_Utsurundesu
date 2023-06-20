@@ -4,12 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,11 +24,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, ConnectBT.ConnectBTCallback {
-    private static final String LOG = "BluetoothApp";
+    private static final String TAG = "MAINApp";
+    private final int REQUEST_ENABLE_BT = 1;
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothSocket socket;
-    private BluetoothDevice device;
-    private int REQUEST_ENABLE_BT = 1;
 
     private Button connectButton;
     private Button previewButton;
@@ -69,18 +68,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        Log.d(LOG, "blog onClick()");
+        Log.d(TAG, "blog onClick()");
         if (view.getId() == R.id.connectButton) {
             new ConnectBT(MainActivity.this, bluetoothAdapter, MainActivity.this).execute();
         } else if (view.getId() == R.id.previewButton) {
             if (socket != null && socket.isConnected()) {
                 sendPreviewRequest(socket);
-
-                long startTime = System.currentTimeMillis();
-                long endTime = startTime + 10000;
-                while (System.currentTimeMillis() < endTime) {
-                    receivePhoto(socket);
-                }
+                new ReceivePhotoTask().execute(socket);
             } else {
                 Toast.makeText(MainActivity.this, "Bluetoothに接続されていません", Toast.LENGTH_SHORT).show();
             }
@@ -119,26 +113,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void receivePhoto(BluetoothSocket socket) {
-        try {
-            InputStream inputStream = socket.getInputStream();
+    private class ReceivePhotoTask extends AsyncTask<BluetoothSocket, Void, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(BluetoothSocket... sockets) {
+            BluetoothSocket socket = sockets[0];
+            try {
+                InputStream inputStream = socket.getInputStream();
 
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                byteArrayOutputStream.write(buffer, 0, bytesRead);
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    byteArrayOutputStream.write(buffer, 0, bytesRead);
+                }
+
+                byte[] photoData = byteArrayOutputStream.toByteArray();
+                byteArrayOutputStream.close();
+
+                return BitmapFactory.decodeByteArray(photoData, 0, photoData.length);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            return null;
+        }
 
-            byte[] photoData = byteArrayOutputStream.toByteArray();
-            byteArrayOutputStream.close();
-
-            Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoData, 0, photoData.length);
-            previewImageView.setImageBitmap(photoBitmap);
-            previewFrameLayout.addView(previewImageView);
-        } catch (Exception e) {
-            e.printStackTrace();
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            if (result != null) {
+                previewImageView.setImageBitmap(result);
+                previewFrameLayout.addView(previewImageView);
+            } else {
+                Log.d(TAG, "Unable to receive preview.");
+                Toast.makeText(MainActivity.this, "プレビューを受信できませんでした", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
