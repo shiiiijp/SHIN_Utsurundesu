@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         Log.d(LOG, "blog onClick()");
         if (view.getId() == R.id.connectButton) {
-            new ConnectBT(MainActivity.this, bluetoothAdapter, socket, MainActivity.this).execute();
+            new ConnectBT(MainActivity.this, bluetoothAdapter, MainActivity.this).execute();
         } else if (view.getId() == R.id.previewButton) {
             if (socket != null && socket.isConnected()) {
                 sendPreviewRequest(socket);
