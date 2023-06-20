@@ -32,11 +32,14 @@ public class ConnectBT extends AsyncTask<Void, Void, BluetoothSocket> {
     private BluetoothAdapter mAdapter;
     private BluetoothSocket mSocket;
     private BluetoothDevice mDevice;
+    private ConnectBTCallback mCallback;
 
-    public ConnectBT(Activity parentActivity, BluetoothAdapter bluetoothAdapter, BluetoothSocket socket) {
+
+    public ConnectBT(Activity parentActivity, BluetoothAdapter bluetoothAdapter, BluetoothSocket socket, ConnectBTCallback callback) {
         this.mParentActivity = parentActivity;
         this.mAdapter = bluetoothAdapter;
         this.mSocket = socket;
+        this.mCallback = callback;
     }
 
     @Override
@@ -75,19 +78,19 @@ public class ConnectBT extends AsyncTask<Void, Void, BluetoothSocket> {
                     e.printStackTrace();
                 }
             }
-            return mSocket;
         }
-        return null;
+        return mSocket;
     }
 
     @Override
     protected void onPostExecute(BluetoothSocket socket) {
         super.onPostExecute(socket);
-
-        if (!isConnected) {
-            Toast.makeText(mParentActivity, "Bluetooth接続エラー", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(mParentActivity, "Bluetooth接続成功", Toast.LENGTH_LONG).show();
+        if (mCallback != null) {
+            mCallback.onConnectBTResult(socket);
         }
+    }
+
+    public interface ConnectBTCallback {
+        void onConnectBTResult(BluetoothSocket socket);
     }
 }

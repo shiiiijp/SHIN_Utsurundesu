@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,10 +23,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, ConnectBT.ConnectBTCallback {
     private static final String LOG = "BluetoothApp";
     private BluetoothAdapter bluetoothAdapter;
     private BluetoothSocket socket;
+    private BluetoothDevice device;
     private int REQUEST_ENABLE_BT = 1;
 
     private Button connectButton;
@@ -49,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         previewButton.setOnClickListener(this);
         shootButton.setOnClickListener(this);
 
+        previewButton.setEnabled(false);
+        shootButton.setEnabled(false);
+
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
             Toast.makeText(MainActivity.this, "Bluetoothはこのデバイスでサポートされていません", Toast.LENGTH_LONG).show();
@@ -66,15 +71,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         Log.d(LOG, "blog onClick()");
         if (view.getId() == R.id.connectButton) {
-            new ConnectBT(MainActivity.this, bluetoothAdapter, socket){
-                @Override
-                protected void onPostExecute(BluetoothSocket socket) {
-                    super.onPostExecute(socket);
-                    MainActivity.this.socket = socket;
-                }
-            }.execute();
-        }
-        if (view.getId() == R.id.previewButton) {
+            new ConnectBT(MainActivity.this, bluetoothAdapter, socket, MainActivity.this).execute();
+        } else if (view.getId() == R.id.previewButton) {
             if (socket != null && socket.isConnected()) {
                 sendPreviewRequest(socket);
 
@@ -86,13 +84,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 Toast.makeText(MainActivity.this, "Bluetoothに接続されていません", Toast.LENGTH_SHORT).show();
             }
-        }
-        if (view.getId() == R.id.shootButton) {
+        } else if (view.getId() == R.id.shootButton) {
             if (socket != null && socket.isConnected()) {
                 sendShootRequest(socket);
             } else {
                 Toast.makeText(MainActivity.this, "Bluetoothに接続されていません", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    @Override
+    public void onConnectBTResult(BluetoothSocket socket) {
+        this.socket = socket;
+        if (socket != null && socket.isConnected()) {
+            Toast.makeText(MainActivity.this, "Bluetooth接続成功", Toast.LENGTH_LONG).show();
+            previewButton.setEnabled(true);
+            shootButton.setEnabled(true);
+        } else {
+            Toast.makeText(MainActivity.this, "Bluetooth接続エラー", Toast.LENGTH_LONG).show();
         }
     }
 
