@@ -15,8 +15,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class ConnectBT extends AsyncTask<Void, Void, BluetoothSocket> {
-//    private static final String DEVICE_ADDRESS = "B8:27:EB:D7:92:D5";
-    private static final String DEVICE_ADDRESS = "40:5B:D8:A3:C8:2A";
+    private static final String DEVICE_ADDRESS = "B8:27:EB:D7:92:D5";
     private static final UUID PORT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");  // Raspberry Pi側も同じにしてね
     private static final String TAG = "CBT";
     private boolean isConnected = false;
