@@ -45,11 +45,11 @@ public class ConnectBTActivity extends AppCompatActivity implements ConnectBT.Co
     public void onConnectBTResult(BluetoothSocket socket) {
         if (socket != null && socket.isConnected()) {
             BluetoothSocketHolder.setSocket(socket);
-            Toast.makeText(ConnectBTActivity.this, "Bluetooth接続成功", Toast.LENGTH_LONG).show();
+            Toast.makeText(ConnectBTActivity.this, "Bluetooth接続成功", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getApplication(), ShootingActivity.class);
             startActivity(intent);
         } else {
-            Toast.makeText(ConnectBTActivity.this, "Bluetooth接続エラー", Toast.LENGTH_LONG).show();
+            Toast.makeText(ConnectBTActivity.this, "Bluetooth接続エラー", Toast.LENGTH_SHORT).show();
         }
     }
 }

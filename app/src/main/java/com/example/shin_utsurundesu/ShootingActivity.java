@@ -17,9 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 public class ShootingActivity extends AppCompatActivity implements View.OnClickListener {
@@ -50,13 +48,16 @@ public class ShootingActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         if (view.getId() == R.id.button_preview) {
             if (socket != null && socket.isConnected()) {
+                Log.d(TAG, "preview button");
                 sendPreviewRequest(socket);
+                Log.d(TAG, "start receiving photo...");
                 new ReceivePhotoTask().execute(socket);
             } else {
                 Toast.makeText(ShootingActivity.this, "Bluetoothに接続されていません", Toast.LENGTH_SHORT).show();
             }
         } else if (view.getId() == R.id.button_shoot) {
             if (socket != null && socket.isConnected()) {
+                Log.d(TAG, "shoot button");
                 sendShootRequest(socket);
             } else {
                 Toast.makeText(ShootingActivity.this, "Bluetoothに接続されていません", Toast.LENGTH_SHORT).show();
@@ -83,6 +84,7 @@ public class ShootingActivity extends AppCompatActivity implements View.OnClickL
         @Override
         protected Bitmap doInBackground(BluetoothSocket... sockets) {
             BluetoothSocket socket = sockets[0];
+            Log.d(TAG, "socket received");
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream(socket.getInputStream());
                 return bitmap;
@@ -95,11 +97,14 @@ public class ShootingActivity extends AppCompatActivity implements View.OnClickL
         @Override
         protected void onPostExecute(Bitmap result) {
             if (result != null) {
-                previewImageView.setImageBitmap(result);
                 if(previewImageView.getParent() != null) {
                     ((ViewGroup)previewImageView.getParent()).removeView(previewImageView);
                 }
+                Log.d(TAG, "adding view...");
+                previewImageView.setImageBitmap(result);
+                Log.d(TAG, "set ImageView");
                 previewFrameLayout.addView(previewImageView);
+                Log.d(TAG, "add view!");
             } else {
                 Log.d(TAG, "Unable to receive preview.");
                 Toast.makeText(ShootingActivity.this, "プレビューを受信できませんでした", Toast.LENGTH_SHORT).show();

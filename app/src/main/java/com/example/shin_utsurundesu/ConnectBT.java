@@ -41,7 +41,7 @@ public class ConnectBT extends AsyncTask<Void, Void, BluetoothSocket> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        Toast.makeText(mParentActivity, "Bluetooth接続中...", Toast.LENGTH_LONG).show();
+        Toast.makeText(mParentActivity, "Bluetooth接続中...", Toast.LENGTH_SHORT).show();
     }
 
     @Override
