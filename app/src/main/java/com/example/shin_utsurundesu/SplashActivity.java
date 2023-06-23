@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 public class SplashActivity extends AppCompatActivity {
-    private static final int DURATION = 3000;
+    private static final int DURATION = 1000;
     private final Handler handler = new Handler();
     private Runnable to;
 
