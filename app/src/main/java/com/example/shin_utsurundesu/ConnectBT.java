@@ -19,7 +19,9 @@ import java.util.UUID;
 
 public class ConnectBT extends AsyncTask<Void, Void, BluetoothSocket> {
     static final int REQUEST_CODE = 1;
-    private static final String DEVICE_ADDRESS = "B8:27:EB:D7:92:D5";
+    // prev mac address
+//    private static final String DEVICE_ADDRESS = "B8:27:EB:D7:92:D5";
+    private static final String DEVICE_ADDRESS = "00:1A:7D:DA:71:15";
 //    private static final UUID PORT_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");  // Raspberry Pi側も同じにしてね
 //    private static final UUID SERVICE_UUID = UUID.fromString("e288efca-8008-4105-99f0-072c8e9e51a3"); // 任意のUUID
     private static final UUID SERVICE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
