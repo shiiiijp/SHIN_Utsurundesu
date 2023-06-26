@@ -2,19 +2,22 @@ package com.example.shin_utsurundesu;
 
 import static android.content.ContentValues.TAG;
 
+import static java.lang.Math.ceil;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -26,7 +29,8 @@ public class ShootingActivity extends AppCompatActivity implements View.OnClickL
     private FrameLayout shootButton;
     private ImageView previewImageView;
     private FrameLayout previewFrameLayout;
-
+    private TextView shootTextView;
+    private CountDownTimer shootRequestTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +43,33 @@ public class ShootingActivity extends AppCompatActivity implements View.OnClickL
         shootButton = findViewById(R.id.button_shoot);
         previewImageView = findViewById(R.id.imageview_preview);
         previewFrameLayout = findViewById(R.id.framelayout_preview);
+        shootTextView = findViewById(R.id.textview_shoot);
 
         previewButton.setOnClickListener(this);
         shootButton.setOnClickListener(this);
+
+        shootRequestTimer = new CountDownTimer(5000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int seconds = (int) ceil(millisUntilFinished / 1000.0);
+                shootTextView.setText(String.valueOf(seconds));
+            }
+
+            @Override
+            public void onFinish() {
+                Log.d(TAG, "shoot button");
+                sendShootRequest(socket);
+                Toast.makeText(ShootingActivity.this, "撮影しました！", Toast.LENGTH_SHORT).show();
+                shootTextView.setText(String.valueOf("撮影する"));
+            }
+        };
     }
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.button_preview) {
             if (socket != null && socket.isConnected()) {
+                Toast.makeText(ShootingActivity.this, "プレビューを取得中です...", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "preview button");
                 sendPreviewRequest(socket);
                 Log.d(TAG, "start receiving photo...");
@@ -56,11 +78,10 @@ public class ShootingActivity extends AppCompatActivity implements View.OnClickL
                 Toast.makeText(ShootingActivity.this, "Bluetoothに接続されていません", Toast.LENGTH_SHORT).show();
             }
         } else if (view.getId() == R.id.button_shoot) {
-            if (socket != null && socket.isConnected()) {
-                Log.d(TAG, "shoot button");
-                sendShootRequest(socket);
-            } else {
+            if (socket == null || !socket.isConnected()) {
                 Toast.makeText(ShootingActivity.this, "Bluetoothに接続されていません", Toast.LENGTH_SHORT).show();
+            } else {
+                shootRequestTimer.start();
             }
         }
     }
