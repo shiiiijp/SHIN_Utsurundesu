@@ -1,3 +1,3 @@
 # シン・写ルンです
   
-写ルンですを遠隔撮影する Android + Raspberry Pi アプリケーション
+『写ルンです』を遠隔撮影する Android + Raspberry Pi アプリケーション
