@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">SHIN_Utsurundesu</string>
+    <string name="icon">icon</string>
+    <string name="app_name_jp">シン・写ルンです</string>
+    <string name="button_start">はじめる</string>
+    <string name="button_next">次へ</string>
+    <string name="description1">自分の手の届かない範囲から、\n 写ルンですを使って \n 写真を撮ることができます。</string>
+    <string name="description2">写ルンですに付属した \n Webカメラを通じてプレビューを見ることができます。</string>
+    <string name="description_bt">写ルンですに装着したデバイスに \n Bluetooth接続する必要があります。 \n Bluetooth機能を有効化し、\n デバイスに接続してください。</string>
+    <string name="shoot">撮影</string>
+    <string name="preview">プレビュー</string>
+    <string name="button_connect_bt">接続する</string>
+    <string name="button_preview">プレビューを見る</string>
+    <string name="button_shoot">撮影する</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
